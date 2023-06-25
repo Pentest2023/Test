@@ -6,4 +6,9 @@
   <script type="text/javascript">
     alert("XSS by BHARAT");
   </script>
+  <circle
+    cx="100"
+    cy="100"
+    r="100"
+    onclick="alert('You have clicked the circle.')" />
 </svg>
