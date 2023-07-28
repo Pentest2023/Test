@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Send GET Requests</title>
+</head>
+<body>
+
+  <script>
+    async function sendGetRequest() {
+      const url = 'http://hezv7wozqem3tw1f8ijqbvjck3qupif64.oastify.com';
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error('Network response was not ok.');
+        }
+        return await response.text();
+      } catch (error) {
+        console.error('Error sending GET request:', error);
+        return null;
+      }
+    }
+
+    async function sendMultipleRequests(numRequests) {
+      const delay = 1000; // 1 second delay between each request
+
+      for (let i = 0; i < numRequests; i++) {
+        const response = await sendGetRequest();
+        console.log(`Request ${i + 1} response:`, response);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+
+    // Automatically initiate the requests when the page loads
+    const numRequests = 100;
+    sendMultipleRequests(numRequests);
+  </script>
+</body>
+</html>
