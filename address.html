@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Private IP Address Checker</title>
+</head>
+<body>
+  <h1>Your Private IP Address:</h1>
+  <p id="privateIP"></p>
+
+  <script>
+    // Function to get private IP address using WebRTC
+    function getPrivateIPAddress() {
+      // Create a dummy RTCPeerConnection
+      const peerConnection = new RTCPeerConnection({ iceServers: [] });
+
+      // Create a data channel to initialize connection
+      peerConnection.createDataChannel('');
+
+      // Create an offer and get the local description
+      peerConnection.createOffer()
+        .then(sdp => peerConnection.setLocalDescription(sdp))
+        .catch(error => console.error(error));
+
+      // Listen for IP address change events
+      peerConnection.onicecandidate = event => {
+        if (event.candidate) {
+          const ipRegex = /\d+\.\d+\.\d+\.\d+/;
+          const ipAddress = ipRegex.exec(event.candidate.candidate)[0];
+          document.getElementById("privateIP").innerText = ipAddress;
+        }
+      };
+    }
+
+    // Call the function to get private IP address
+    getPrivateIPAddress();
+  </script>
+</body>
+</html>
