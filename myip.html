@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IP and Browser Information</title>
+</head>
+<body>
+  <h1>Your Public IP Address:</h1>
+  <p id="publicIp"></p>
+
+  <h1>Your User Agent:</h1>
+  <p id="userAgent"></p>
+
+  <script>
+    // Function to get the public IP address
+    function getPublicIP(callback) {
+      const apiUrl = 'https://api.ipify.org?format=json';
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const publicIP = data.ip;
+          callback(publicIP);
+        })
+        .catch(error => {
+          console.error('Error fetching the public IP:', error);
+          callback(null);
+        });
+    }
+
+    // Function to get the user agent and browser version
+    function getUserAgent() {
+      const userAgent = navigator.userAgent;
+      const browserVersion = navigator.appVersion;
+      return {
+        userAgent,
+        browserVersion
+      };
+    }
+
+    // Usage
+    getPublicIP(function (publicIP) {
+      const publicIpElement = document.getElementById('publicIp');
+      publicIpElement.textContent = publicIP || 'Public IP not available';
+    });
+
+    const { userAgent, browserVersion } = getUserAgent();
+    const userAgentElement = document.getElementById('userAgent');
+    userAgentElement.textContent = `User Agent: ${userAgent}\nBrowser Version: ${browserVersion}`;
+  </script>
+</body>
+</html>
