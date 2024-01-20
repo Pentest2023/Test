@@ -1,14 +1,7 @@
 <html>
     <body>
-        <script type="text/javascript">
-// Specify the URL you want to open
-var urlToOpen = 'javascript:alert(321)';
-
-// Use window.open to open the URL in a new window or tab
-window.open(urlToOpen, '_blank');
-
-
-</script>
-    
+        <script>
+            window.location="http://evil.com@javascript://legitimate.com/%0aalert(1)//"
+            </script>
     </body>
 </html>
