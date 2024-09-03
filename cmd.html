@@ -1,5 +1,35 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Redirect</title>
+</head>
 <body>
-<h1>IOS_WebView_ATO</h1>  
-<a href="eufysecurity://eufy/explore/web#https://google.com">Eufysec</a>
+    <h1>Enter a URL to Redirect</h1>
+    <form id="redirectForm">
+        <label for="urlInput">URL:</label>
+        <input type="text" id="urlInput" placeholder="https://example.com" required>
+        <button type="submit">Go</button>
+    </form>
+    <p id="linkContainer" style="display:none;">
+        <a id="redirectLink" href="" target="_blank">Click here</a>
+    </p>
+
+    <script>
+        document.getElementById('redirectForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent form submission
+            const url = document.getElementById('urlInput').value;
+            const linkContainer = document.getElementById('linkContainer');
+            const redirectLink = document.getElementById('redirectLink');
+            
+            if (url) {
+                // Update the link's href attribute
+                redirectLink.href = url;
+                // Show the link container
+                linkContainer.style.display = 'block';
+            }
+        });
+    </script>
+</body>
 </html>
