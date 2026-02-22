@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RTS Iframe Test</title>
+</head>
+<body style="font-family: Arial; text-align:center; margin-top:50px;">
+
+<h1>RTS Embedded Test Page</h1>
+
+<button onclick="testParentAccess()">Test Parent DOM Access</button>
+<button onclick="testTopNavigation()">Test Top Navigation</button>
+<button onclick="testPostMessage()">Send postMessage</button>
+
+<div id="output" style="margin-top:30px; color:red;"></div>
+
+<script>
+
+function log(msg){
+    document.getElementById("output").innerHTML += "<br>" + msg;
+}
+
+function testParentAccess(){
+    try{
+        var x = window.parent.document;
+        log("Parent DOM ACCESSIBLE ❗");
+    }catch(e){
+        log("Parent DOM BLOCKED ✅ (SOP working)");
+    }
+}
+
+function testTopNavigation(){
+    try{
+        top.location = "https://example.com";
+        log("Top navigation attempted...");
+    }catch(e){
+        log("Top navigation BLOCKED");
+    }
+}
+
+function testPostMessage(){
+    window.parent.postMessage("Hello from iframe", "*");
+    log("postMessage sent to parent");
+}
+
+</script>
+
+</body>
+</html>
